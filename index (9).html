@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Calekyz FX | Institutional Trading Infrastructure</title>
+  
+  <!-- Google tag (gtag.js) - UPDATED WITH YOUR EXACT CODE -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-L19Z3VL7SB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-L19Z3VL7SB');
+  </script>
+  
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Professional Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* LIGHT/DARK MODE VARIABLES */
+    :root {
+      --bg-primary: #0a0e17;
+      --bg-overlay: rgba(0, 0, 0, 0.75);
+      --card-bg: rgba(15, 23, 42, 0.7);
+      --text-primary: #eef2ff;
+      --text-secondary: #cbd5e1;
+      --border-color: rgba(0, 100, 255, 0.2);
+      --navbar-bg: rgba(15, 23, 42, 0.7);
+      --footer-border: rgba(255, 255, 255, 0.05);
+    }
+
+    body.light-mode {
+      --bg-primary: #f0f4f8;
+      --bg-overlay: rgba(255, 255, 255, 0.85);
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --text-primary: #1e293b;
+      --text-secondary: #334155;
+      --border-color: rgba(0, 100, 255, 0.3);
+      --navbar-bg: rgba(255, 255, 255, 0.85);
+      --footer-border: rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text-primary);
+      line-height: 1.5;
+      scroll-behavior: smooth;
+      position: relative;
+      background: var(--bg-primary);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://i.postimg.cc/0NNMQ0hp/Forex-Trading-and-Chart-Wallpapers-Collection.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      z-index: -2;
+      transition: opacity 0.3s ease;
+    }
+
+    body.light-mode::before {
+      opacity: 0.3;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-overlay);
+      z-index: -1;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Loader */
+    .page-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0a0e17;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
+    }
+
+    #candleCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      opacity: 0.3;
+    }
+
+    .loader-content {
+      text-align: center;
+      z-index: 2;
+      background: rgba(10, 14, 23, 0.92);
+      backdrop-filter: blur(20px);
+      padding: 48px 72px;
+      border-radius: 32px;
+      border: 2px solid transparent;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: borderPulse 2s ease-in-out infinite;
+      position: relative;
+    }
+
+    @keyframes borderPulse {
+      0% { border-color: rgba(0, 100, 255, 0.5); box-shadow: 0 0 20px rgba(0, 100, 255, 0.2), inset 0 0 10px rgba(0, 100, 255, 0.05); }
+      50% { border-color: rgba(255, 215, 0, 0.7); box-shadow: 0 0 50px rgba(255, 215, 0, 0.3), inset 0 0 20px rgba(255, 215, 0, 0.1); }
+      100% { border-color: rgba(0, 100, 255, 0.5); box-shadow: 0 0 20px rgba(0, 100, 255, 0.2), inset 0 0 10px rgba(0, 100, 255, 0.05); }
+    }
+
+    .loader-logo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #0064ff;
+      box-shadow: 0 0 30px rgba(0, 100, 255, 0.4);
+      margin-bottom: 24px;
+      animation: logoGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes logoGlow {
+      0%, 100% { box-shadow: 0 0 20px rgba(0, 100, 255, 0.4); border-color: #0064ff; }
+      50% { box-shadow: 0 0 50px rgba(255, 215, 0, 0.5); border-color: #ffd700; }
+    }
+
+    .loader-text {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #FFFFFF, #94a3b8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .loader-text span {
+      background: linear-gradient(135deg, #0064ff, #ffd700);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .price-ticker {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      margin: 24px 0 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+    }
+
+    .ticker-up { color: #00ff88; animation: pulseGreen 1.5s ease-in-out infinite; }
+    .ticker-down { color: #ff4466; animation: pulseRed 1.8s ease-in-out infinite; }
+
+    @keyframes pulseGreen {
+      0%, 100% { opacity: 0.7; text-shadow: none; }
+      50% { opacity: 1; text-shadow: 0 0 5px #00ff88; }
+    }
+
+    @keyframes pulseRed {
+      0%, 100% { opacity: 0.7; text-shadow: none; }
+      50% { opacity: 1; text-shadow: 0 0 5px #ff4466; }
+    }
+
+    .active-users { margin: 16px 0; }
+    .active-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: #5a6a82; }
+    .active-number { font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, #0064ff, #ffd700); -webkit-background-clip: text; background-clip: text; color: transparent; animation: countPulse 1s ease-in-out infinite; }
+
+    @keyframes countPulse {
+      0%, 100% { opacity: 0.8; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.02); }
+    }
+
+    .loader-dots { display: flex; justify-content: center; gap: 12px; margin-top: 24px; }
+    .loader-dots span { width: 10px; height: 10px; border-radius: 50%; animation: dotBounce 0.6s ease-in-out infinite; }
+    .loader-dots span:nth-child(1) { background: #0064ff; animation-delay: 0s; }
+    .loader-dots span:nth-child(2) { background: #ffd700; animation-delay: 0.15s; }
+    .loader-dots span:nth-child(3) { background: #0064ff; animation-delay: 0.3s; }
+
+    @keyframes dotBounce {
+      0%, 100% { transform: translateY(0); opacity: 0.4; }
+      50% { transform: translateY(-8px); opacity: 1; }
+    }
+
+    .loading-percent { margin-top: 20px; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #0064ff; letter-spacing: 2px; }
+    .page-loader.hide { opacity: 0; visibility: hidden; }
+    .main-content { opacity: 0; transition: opacity 0.8s ease-out; }
+    .main-content.visible { opacity: 1; }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 2; }
+
+    /* Navbar */
+    .navbar {
+      padding: 14px 28px;
+      margin-top: 24px;
+      background: var(--navbar-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      transition: background 0.3s ease;
+    }
+
+    .logo-container { display: flex; align-items: center; gap: 12px; }
+    .logo-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1.5px solid #0064ff; }
+    .logo-text { font-size: 1.4rem; font-weight: 700; background: linear-gradient(135deg, #FFFFFF, #cbd5e1); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .logo-text span { background: linear-gradient(135deg, #0064ff, #ffd700); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+    .nav-buttons { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .float-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 22px; border-radius: 40px; font-weight: 600; font-size: 0.8rem; text-decoration: none; transition: all 0.2s ease; cursor: pointer; border: none; background: rgba(0, 100, 255, 0.15); color: #60a5fa; border: 1px solid rgba(0, 100, 255, 0.4); }
+    .float-btn:hover { background: #0064ff; color: white; transform: translateY(-2px); }
+    
+    /* ANIMATED DERIV API BUTTON */
+    .btn-deriv {
+      background: linear-gradient(135deg, #0064ff, #00a3ff, #0064ff);
+      background-size: 200% 200%;
+      animation: gradientShift 3s ease infinite, floatUpDown 1.5s ease-in-out infinite;
+      color: white;
+      border: none;
+      box-shadow: 0 0 15px rgba(0,100,255,0.5);
+    }
+    .btn-deriv:hover {
+      animation: gradientShift 1.5s ease infinite, floatUpDown 0.8s ease-in-out infinite;
+      transform: translateY(-2px);
+      box-shadow: 0 0 25px rgba(0,100,255,0.8);
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes floatUpDown {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-4px); }
+      100% { transform: translateY(0px); }
+    }
+    
+    .btn-forex { background: rgba(255, 215, 0, 0.1); color: #fcd34d; border: 1px solid rgba(255, 215, 0, 0.3); }
+    .btn-forex:hover { background: #ffd700; color: #0a0f1c; transform: translateY(-2px); }
+    .btn-affiliate-header { background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(0,100,255,0.15)); color: #ffd700; border: 1px solid rgba(255,215,0,0.5); }
+    .btn-affiliate-header:hover { background: linear-gradient(135deg, #ffd700, #0064ff); color: #0a0f1c; transform: translateY(-2px); }
+
+    /* Dark/Light Mode Toggle Button */
+    .theme-toggle {
+      background: rgba(0, 100, 255, 0.2);
+      border: 1px solid rgba(0, 100, 255, 0.4);
+      border-radius: 40px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      color: var(--text-primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .theme-toggle:hover {
+      background: #0064ff;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    /* Social Circles */
+    .social-circle-section { margin: 32px 0 24px; text-align: center; }
+    .social-circle-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 3px; color: #5a6a82; margin-bottom: 20px; }
+    .social-circle-container { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .social-circle {
+      width: 44px; height: 44px; border-radius: 50%; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1.3rem;
+      transition: all 0.2s ease; border: 1px solid rgba(0, 100, 255, 0.2);
+      opacity: 0; transform: scale(0.8); animation: fadeInScale 0.4s ease-out forwards;
+    }
+    body.light-mode .social-circle {
+      background: rgba(255, 255, 255, 0.8);
+    }
+    .social-circle:nth-child(1) { animation-delay: 0.05s; }
+    .social-circle:nth-child(2) { animation-delay: 0.15s; }
+    .social-circle:nth-child(3) { animation-delay: 0.25s; }
+    .social-circle:nth-child(4) { animation-delay: 0.35s; }
+    @keyframes fadeInScale { to { opacity: 1; transform: scale(1); } }
+    .social-circle:hover { transform: translateY(-3px); }
+    .social-circle.telegram { color: #0088cc; }
+    .social-circle.telegram:hover { background: #0088cc; color: white; }
+    .social-circle.tiktok { color: #ffffff; }
+    .social-circle.tiktok:hover { background: #000; color: #ff0040; }
+    .social-circle.youtube { color: #ff0000; }
+    .social-circle.youtube:hover { background: #ff0000; color: white; }
+    .social-circle.whatsapp { color: #25D366; }
+    .social-circle.whatsapp:hover { background: #25D366; color: white; }
+
+    /* Hero */
+    .hero { padding: 48px 0 40px; }
+    .hero-grid { display: flex; flex-wrap: wrap; gap: 48px; align-items: center; justify-content: space-between; }
+    .hero-content { flex: 1; min-width: 280px; }
+    .hero-badge { background: rgba(0, 100, 255, 0.12); color: #60a5fa; padding: 4px 14px; border-radius: 40px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; display: inline-block; margin-bottom: 24px; border: 1px solid rgba(0, 100, 255, 0.3); }
+    .hero h1 { font-size: 3.5rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 24px; }
+    .hero h1 span { background: linear-gradient(135deg, #0064ff, #ffd700); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero p { font-size: 1rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 32px; max-width: 500px; }
+    .api-powered-badge { display: inline-flex; align-items: center; gap: 12px; background: rgba(0, 100, 255, 0.08); border: 1px solid rgba(0, 100, 255, 0.2); border-radius: 60px; padding: 6px 18px; margin-top: 8px; }
+    .api-powered-text { font-size: 0.7rem; font-weight: 500; color: #60a5fa; font-family: 'JetBrains Mono', monospace; }
+    .api-powered-text strong { color: #ffd700; }
+
+    /* Cards */
+    .card, .forex-area, .trust-badge, .video-wrapper, .service-card, .class-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      transition: background 0.3s ease;
+    }
+
+    .card { padding: 40px; margin-bottom: 48px; transition: all 0.2s ease; }
+    .card:hover { border-color: rgba(0, 100, 255, 0.4); }
+    
+    .service-card { padding: 32px; margin-bottom: 40px; transition: all 0.2s ease; }
+    .service-card:hover { border-color: rgba(255, 215, 0, 0.4); transform: translateY(-4px); }
+
+    /* Classes Section Styles */
+    .classes-section {
+      margin: 48px 0;
+      text-align: center;
+    }
+    .section-badge {
+      font-size: 0.7rem;
+      color: #ffd700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .class-card {
+      max-width: 650px;
+      margin: 32px auto 0;
+      padding: 32px 28px;
+      transition: all 0.3s ease;
+    }
+    .class-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 215, 0, 0.5);
+      box-shadow: 0 20px 30px -15px rgba(0,0,0,0.3);
+    }
+    .class-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+    .class-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #FFFFFF, #cbd5e1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .class-schedule {
+      font-size: 1rem;
+      color: #60a5fa;
+      margin: 16px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .class-teacher {
+      font-size: 0.9rem;
+      background: rgba(255, 215, 0, 0.12);
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 40px;
+      margin: 12px 0;
+      color: #fcd34d;
+    }
+    .prices-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      justify-content: center;
+      margin: 24px 0 16px;
+      padding: 16px 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .price-item {
+      flex: 1;
+      min-width: 180px;
+      text-align: center;
+    }
+    .price-amount {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #0064ff, #ffd700);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .price-kenya {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+    .price-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #5a6a82;
+      margin-bottom: 8px;
+    }
+    .payment-methods {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      margin: 20px 0 24px;
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+    .payment-methods i {
+      font-size: 1.1rem;
+      margin-right: 6px;
+      color: #ffd700;
+    }
+    .btn-class {
+      width: 80%;
+      justify-content: center;
+      padding: 14px;
+      font-size: 1rem;
+    }
+
+    .risk-warning {
+      background: rgba(255, 68, 102, 0.1);
+      border-left: 4px solid #ff4466;
+      padding: 16px 20px;
+      border-radius: 12px;
+      margin: 20px 0;
+      font-size: 0.75rem;
+      color: #ff9999;
+    }
+
+    .profit-split {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffd700, #ffaa00);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin: 16px 0;
+    }
+
+    .api-buttons-group { display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; }
+    .api-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 24px; border-radius: 40px; font-weight: 500; font-size: 0.85rem; text-decoration: none; transition: all 0.2s ease; font-family: 'JetBrains Mono', monospace; }
+    .btn-legacy { background: rgba(0, 100, 255, 0.15); color: #60a5fa; border: 1px solid rgba(0, 100, 255, 0.3); }
+    .btn-legacy:hover { background: #0064ff; color: white; transform: translateY(-2px); }
+    .btn-new { background: rgba(255, 215, 0, 0.12); color: #fcd34d; border: 1px solid rgba(255, 215, 0, 0.3); }
+    .btn-new:hover { background: #ffd700; color: #0a0f1c; transform: translateY(-2px); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 28px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary { background: linear-gradient(135deg, #0064ff, #0050cc); color: white; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 100, 255, 0.3); }
+    .btn-secondary { background: rgba(30, 41, 59, 0.8); color: #e2e8f0; border: 1px solid #334155; }
+    .btn-secondary:hover { background: #334155; transform: translateY(-2px); }
+    .btn-whatsapp { background: #25D366; color: #0a0f1c; }
+    .btn-whatsapp:hover { background: #20bd59; transform: translateY(-2px); }
+    .btn-gold { background: linear-gradient(135deg, #ffd700, #ccaa00); color: #0a0f1c; }
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3); }
+
+    .forex-area { padding: 48px 40px; margin: 48px 0; text-align: center; }
+    .price-tag { font-size: 3rem; font-weight: 700; background: linear-gradient(135deg, #0064ff, #ffd700); -webkit-background-clip: text; background-clip: text; color: transparent; margin: 20px 0; font-family: 'JetBrains Mono', monospace; }
+    .video-wrapper { margin: 48px 0; overflow: hidden; padding: 0; border-radius: 24px; }
+    .video-wrapper iframe { width: 100%; aspect-ratio: 16 / 9; display: block; }
+
+    .trust-badge { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 32px; padding: 40px 32px; margin: 48px 0; }
+    .trust-item { flex: 1; text-align: center; }
+    .trust-icon { font-size: 2rem; margin-bottom: 12px; }
+    .trust-item h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; }
+    .trust-item p { font-size: 0.75rem; color: #94a3b8; }
+
+    .button-group { display: flex; flex-wrap: wrap; gap: 14px; }
+
+    /* Payment Details Area inside Forex Bot */
+    .payment-details-area {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,215,0,0.2);
+      text-align: center;
+    }
+    .payment-details-area h4 {
+      font-size: 0.9rem;
+      color: #ffd700;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+    .payment-icons {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .payment-icons span {
+      background: rgba(0,0,0,0.4);
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #cbd5e1;
+    }
+
+    /* Affiliate Popup Styles */
+    .affiliate-popup-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(12px);
+      z-index: 20000;
+      justify-content: center;
+      align-items: center;
+    }
+    .affiliate-popup-overlay.show {
+      display: flex;
+    }
+    .affiliate-popup {
+      background: rgba(15, 23, 42, 0.98);
+      backdrop-filter: blur(20px);
+      border-radius: 32px;
+      border: 1px solid rgba(255, 215, 0, 0.5);
+      max-width: 480px;
+      width: 90%;
+      padding: 28px 24px 32px;
+      text-align: center;
+      animation: popupFadeIn 0.3s ease-out;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+    }
+    @keyframes popupFadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .affiliate-popup h3 {
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #ffd700, #0064ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .affiliate-popup .popup-sub {
+      color: #94a3b8;
+      font-size: 0.8rem;
+      margin-bottom: 28px;
+    }
+    .affiliate-links {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: 16px 0 24px;
+    }
+    .affiliate-card {
+      background: rgba(0, 100, 255, 0.08);
+      border: 1px solid rgba(0, 100, 255, 0.2);
+      border-radius: 20px;
+      padding: 18px 16px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .affiliate-card:hover {
+      background: rgba(0, 100, 255, 0.2);
+      transform: translateX(6px);
+      border-color: #ffd700;
+    }
+    .affiliate-icon {
+      font-size: 2.2rem;
+      width: 55px;
+      height: 55px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .affiliate-info {
+      text-align: left;
+      flex: 1;
+    }
+    .affiliate-info strong {
+      font-size: 1.1rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .affiliate-info small {
+      font-size: 0.7rem;
+      color: #94a3b8;
+    }
+    .close-popup-btn {
+      background: rgba(255,255,255,0.05);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 40px;
+      color: #cbd5e1;
+      cursor: pointer;
+      margin-top: 12px;
+      width: 100%;
+      font-weight: 500;
+    }
+    .close-popup-btn:hover {
+      background: #ff4466;
+      color: white;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+      z-index: 10000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal.show { display: flex; }
+    .modal-content {
+      background: rgba(15, 23, 42, 0.98);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      border: 1px solid rgba(0,100,255,0.3);
+      padding: 32px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    .modal-content h3 { margin-bottom: 20px; color: #ffd700; }
+    .modal-content input, .modal-content textarea, .modal-content select {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0 16px;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(0,100,255,0.3);
+      border-radius: 12px;
+      color: white;
+      font-family: inherit;
+    }
+    .modal-content label { font-size: 0.8rem; color: #cbd5e1; }
+    .modal-close {
+      float: right;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #ff4466;
+    }
+
+    footer { text-align: center; padding: 48px 0 40px; border-top: 1px solid var(--footer-border); margin-top: 48px; font-size: 0.75rem; color: var(--text-secondary); transition: border-color 0.3s ease; }
+    .scroll-top { position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, #0064ff, #ffd700); color: #0a0f1c; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; transition: all 0.2s; z-index: 100; border: none; }
+    .scroll-top.visible { opacity: 1; }
+    .scroll-top:hover { transform: scale(1.05); }
+
+    /* Smart Chat Button */
+    .smart-chat-container { position: fixed; bottom: 100px; right: 25px; z-index: 9999; }
+    .smart-chat-btn { width: 65px; height: 65px; border-radius: 50%; background: linear-gradient(135deg, #0064ff, #25D366); cursor: pointer; box-shadow: 0 4px 20px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; position: relative; border: 2px solid rgba(255,255,255,0.2); z-index: 9999; }
+    .smart-chat-btn i { font-size: 28px; color: white; }
+    .smart-chat-btn:hover { transform: scale(1.1); }
+    .chat-menu { position: absolute; bottom: 80px; right: 0; width: 280px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border-radius: 20px; border: 1px solid rgba(0, 100, 255, 0.3); box-shadow: 0 10px 40px rgba(0,0,0,0.4); padding: 16px; display: none; flex-direction: column; gap: 12px; animation: slideUp 0.3s ease; }
+    .chat-menu.show { display: flex; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .chat-option { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 14px; text-decoration: none; transition: all 0.2s ease; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); }
+    .chat-option i { font-size: 22px; width: 32px; }
+    .chat-option span { font-size: 0.9rem; font-weight: 500; }
+    .ai-option { background: linear-gradient(135deg, rgba(0,100,255,0.2), rgba(255,215,0,0.1)); border-color: rgba(0,100,255,0.3); color: #60a5fa; }
+    .ai-option:hover { background: linear-gradient(135deg, rgba(0,100,255,0.4), rgba(255,215,0,0.2)); transform: translateX(-5px); }
+    .whatsapp-option { background: rgba(37, 211, 102, 0.15); border-color: rgba(37, 211, 102, 0.3); color: #25D366; }
+    .whatsapp-option:hover { background: rgba(37, 211, 102, 0.3); transform: translateX(-5px); }
+
+    /* FLOATING SOCIAL BUTTON */
+    .floating-social-container {
+      position: fixed;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10001;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+    }
+    .social-float-btn {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: #ffd700;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,215,0,0.6);
+      transition: 0.1s linear;
+      cursor: pointer;
+    }
+    .social-float-menu {
+      position: absolute;
+      left: 68px;
+      top: 0;
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(20px);
+      border-radius: 28px;
+      padding: 12px 16px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 210px;
+      border: 1px solid rgba(255,215,0,0.3);
+      z-index: 10002;
+    }
+    .social-float-menu.show {
+      display: flex;
+    }
+    .social-float-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 16px;
+      border-radius: 40px;
+      text-decoration: none;
+      color: #eef2ff;
+      background: rgba(30, 41, 59, 0.7);
+      transition: 0.2s;
+      font-size: 0.9rem;
+    }
+    .social-float-item:hover {
+      background: #0064ff;
+      transform: translateX(6px);
+      color: white;
+    }
+    body.light-mode .social-float-menu {
+      background: rgba(255, 255, 255, 0.96);
+    }
+    body.light-mode .social-float-item {
+      background: rgba(0, 0, 0, 0.05);
+      color: #1e293b;
+    }
+    body.light-mode .social-float-item:hover {
+      background: #0064ff;
+      color: white;
+    }
+    @media (max-width: 680px) {
+      .floating-social-container { left: 12px; }
+      .social-float-btn { width: 48px; height: 48px; font-size: 24px; }
+      .social-float-menu { left: 58px; min-width: 185px; }
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 0 20px; }
+      .hero h1 { font-size: 2.2rem; }
+      .navbar { flex-direction: column; border-radius: 32px; }
+      .card { padding: 28px; }
+      .hero-grid { text-align: center; }
+      .hero p { margin-left: auto; margin-right: auto; }
+      .button-group { justify-content: center; }
+      .float-btn { padding: 6px 16px; font-size: 0.7rem; }
+      .loader-content { padding: 32px 40px; }
+      .active-number { font-size: 1.5rem; }
+      .price-ticker { gap: 12px; font-size: 0.6rem; }
+      .smart-chat-container { bottom: 80px; right: 20px; }
+      .smart-chat-btn { width: 55px; height: 55px; }
+      .smart-chat-btn i { font-size: 24px; }
+      .chat-menu { width: 260px; right: 0; bottom: 70px; }
+      .class-card { margin: 24px 16px; }
+      .btn-class { width: 100%; }
+      .prices-container { flex-direction: column; gap: 20px; }
+    }
+
+    /* Additional light mode overrides */
+    body.light-mode .hero p,
+    body.light-mode .service-card p,
+    body.light-mode .card p {
+      color: #334155;
+    }
+    body.light-mode .api-powered-text,
+    body.light-mode .api-powered-text strong {
+      color: #0064ff;
+    }
+    body.light-mode footer {
+      color: #475569;
+    }
+    body.light-mode .risk-warning {
+      background: rgba(255, 68, 102, 0.15);
+      color: #dc2626;
+    }
+    body.light-mode .modal-content,
+    body.light-mode .affiliate-popup,
+    body.light-mode .chat-menu {
+      background: rgba(255, 255, 255, 0.98);
+      color: #1e293b;
+    }
+    body.light-mode .modal-content input,
+    body.light-mode .modal-content textarea,
+    body.light-mode .modal-content select {
+      background: rgba(0, 0, 0, 0.05);
+      color: #1e293b;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-loader" id="pageLoader">
+  <canvas id="candleCanvas"></canvas>
+  <div class="loader-content">
+    <img src="https://i.postimg.cc/xCsZxjGF/Chat-GPT-Image-Apr-17-2026-10-54-53-AM.png" alt="Calekyz FX" class="loader-logo">
+    <div class="loader-text">Calekyz <span>FX</span></div>
+    <div class="price-ticker">
+      <span class="ticker-up">↑ EUR/USD XAU/USD</span>
+      <span class="ticker-down">↓ DERIV TRADING</span>
+      <span class="ticker-up">↑ WELCOME AND SUCCESS IN YOUR TRADING</span>
+    </div>
+    <div class="active-users">
+      <div class="active-label">LIVE ACTIVE TRADERS</div>
+      <div class="active-number" id="activeUserCount">0</div>
+    </div>
+    <div class="loader-dots"><span></span><span></span><span></span></div>
+    <div class="loading-percent" id="loadingPercent">INITIALIZING 0%</div>
+  </div>
+</div>
+
+<div class="main-content" id="mainContent">
+<div class="container">
+  <div class="navbar">
+    <div class="logo-container">
+      <img src="https://i.postimg.cc/xCsZxjGF/Chat-GPT-Image-Apr-17-2026-10-54-53-AM.png" alt="Calekyz FX" class="logo-img">
+      <div class="logo-text">Calekyz <span>FX</span></div>
+    </div>
+    <div class="nav-buttons">
+      <a href="#deriv-tools" class="float-btn btn-deriv">⚡ DERIV API</a>
+      <a href="#forex-bot" class="float-btn btn-forex">💱 FOREX BOT</a>
+      <button class="float-btn btn-affiliate-header" id="forexPortalBtnHeader">🌐 FOREX PORTAL • AFFILIATE</button>
+      <button class="theme-toggle" id="themeToggleBtn"><i class="fas fa-moon"></i> <span id="themeText">Dark</span></button>
+    </div>
+  </div>
+
+  <div class="social-circle-section">
+    <div class="social-circle-title">CONNECT — FOLLOW — TRADE</div>
+    <div class="social-circle-container">
+      <a href="https://t.me/calekyz254" target="_blank" class="social-circle telegram"><i class="fab fa-telegram-plane"></i></a>
+      <a href="https://tiktok.com/@calekyz.com" target="_blank" class="social-circle tiktok"><i class="fab fa-tiktok"></i></a>
+      <a href="https://youtube.com/@calekyztradingsite?si=TJx4ngIskL43R4d7" target="_blank" class="social-circle youtube"><i class="fab fa-youtube"></i></a>
+      <a href="https://whatsapp.com/channel/0029Vb6NOev89inkCXWzsp3D" target="_blank" class="social-circle whatsapp"><i class="fab fa-whatsapp"></i></a>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-grid">
+      <div class="hero-content">
+        <div class="hero-badge">✦PRO TRADING INFRASTRUCTURE</div>
+        <h1>Trade Smarter.<br>Automate with <span>Calekyz FX</span></h1>
+        <p>Enterprise-grade API tools for binary and forex markets. Low-latency execution, automated strategies, and real-time signals.</p>
+        <div class="button-group">
+          <a href="https://deriv.partners/rx?sidc=B7409B98-DAA5-4D02-9341-8A0621A99C68&utm_campaign=dynamicworks&utm_medium=affiliate&utm_source=CU67920" target="_blank" class="btn btn-primary">📈 CREATE DERIV ACCOUNT</a>
+          <a href="https://www.puprime.partners/forex-trading-account/?affid=7389780" target="_blank" class="btn btn-secondary">💱 CREATE FOREX ACCOUNT</a>
+        </div>
+        <div class="api-powered-badge">
+          <span>⚡</span>
+          <span class="api-powered-text"><strong>100% API POWERED</strong> • REAL-TIME • LOW LATENCY</span>
+        </div>
+      </div>
+      <div style="flex:0.5;"></div>
+    </div>
+  </div>
+
+  <!-- DERIV API SECTION -->
+  <div id="deriv-tools">
+    <div class="card">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 32px;">
+        <div>
+          <div style="font-size: 0.7rem; color: #60a5fa; letter-spacing: 1px; margin-bottom: 12px;">DERIV • PROFESSIONAL API</div>
+          <h2 style="font-size: 1.8rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 16px;">Automated Binary Trading</h2>
+          <p style="color: #cbd5e1; max-width: 500px; font-size: 0.9rem; line-height: 1.6;">Connect to our institutional API for automated binary options trading. Real-time signals, strategy automation, and seamless execution.</p>
+          <div class="api-buttons-group">
+            <a href="https://app.calekyz.com" target="_blank" class="api-btn btn-legacy">📜 LEGACY API</a>
+            <a href="https://app.calekyz.com" target="_blank" class="api-btn btn-new">🆕 NEW API</a>
+          </div>
+        </div>
+        <div>
+          <a href="https://calekyztradinghub.site" target="_blank" class="btn btn-primary" style="padding: 12px 32px;">🚀 LAUNCH PLATFORM</a>
+          <p style="font-size: 0.7rem; margin-top: 12px; color: #5a6a82;">Powered by Deriv API</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: COPY TRADING / ACCOUNT MANAGEMENT -->
+  <div id="copy-trading" class="service-card">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 32px;">
+      <div style="flex: 1;">
+        <div style="font-size: 0.7rem; color: #ffd700; letter-spacing: 1px; margin-bottom: 12px;">✦ COPY TRADING ✦</div>
+        <h2 style="font-size: 1.8rem; font-weight: 600; margin-bottom: 16px;">Copy my trades/Management <span style="color:#ffd700;">40% Profit Split</span></h2>
+        <p style="color: #cbd5e1; line-height: 1.6;">Let me trade for you. You copy trades/I manage your forex account professionally using proven strategies.</p>
+        
+        <div class="profit-split">💰 40% / 60% Split</div>
+        <p style="color: #cbd5e1; font-size: 0.9rem;">You keep 60% of profits. I earn 40% <strong>only after you make profit</strong>. No profit = no fee.</p>
+        
+        <div class="risk-warning">
+          <strong>⚠️ IMPORTANT RISK DISCLOSURE</strong><br>
+          Trading forex and CFDs carries substantial risk of loss (up to 100% of invested capital). 
+          Past performance does not guarantee future results. Account management does NOT eliminate market risk.
+          Only invest capital you can afford to lose entirely. By requesting this service, you acknowledge these risks.
+        </div>
+        
+        <button class="btn btn-gold" id="copyTradingBtn">
+          📋 REQUEST SERVICE → WhatsApp
+        </button>
+      </div>
+      <div style="text-align: center; min-width: 150px;">
+        <i class="fas fa-chart-line" style="font-size: 80px; color: #ffd700; opacity: 0.7;"></i>
+        <p style="margin-top: 12px; font-size: 0.7rem; color:#5a6a82;">Managed Accounts</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: CUSTOM BOT DEVELOPMENT -->
+  <div id="custom-bot" class="service-card">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 32px;">
+      <div style="flex: 1;">
+        <div style="font-size: 0.7rem; color: #60a5fa; letter-spacing: 1px; margin-bottom: 12px;">✦ BOT DEVELOPMENT ✦</div>
+        <h2 style="font-size: 1.8rem; font-weight: 600; margin-bottom: 16px;">Request a <span style="color:#60a5fa;">Custom Trading Bot</span></h2>
+        <p style="color: #cbd5e1; line-height: 1.6;">Need a bot for a specific strategy? MT4, MT5, or Deriv? Describe your idea and I'll build it for you.</p>
+        
+        <div style="margin: 20px 0;">
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <span style="background: rgba(0,100,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 0.7rem;">📊 Custom Indicators</span>
+            <span style="background: rgba(0,100,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 0.7rem;">🤖 Automated Entry/Exit</span>
+            <span style="background: rgba(0,100,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 0.7rem;">⚡ Risk Management Rules</span>
+          </div>
+        </div>
+        
+        <button class="btn btn-primary" id="customBotBtn">
+          🤖 SUBMIT BOT IDEA → Email
+        </button>
+        <p style="margin-top: 12px; font-size: 0.65rem; color:#5a6a82;">I'll review and contact you when bot is ready</p>
+      </div>
+      <div style="text-align: center; min-width: 150px;">
+        <i class="fas fa-robot" style="font-size: 80px; color: #0064ff; opacity: 0.7;"></i>
+        <p style="margin-top: 12px; font-size: 0.7rem; color:#5a6a82;">Custom Bots</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDEO SECTION -->
+  <div class="video-wrapper">
+    <iframe src="https://www.youtube.com/embed/a_Gj8v95OWQ?si=amG6p8B6KxAidjnC" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+
+  <!-- FOREX BOT SECTION -->
+  <div id="forex-bot" class="forex-area">
+    <div style="font-size: 0.7rem; color: #fcd34d; letter-spacing: 1px;">✦ PROPRIETARY SYSTEM</div>
+    <h2 style="font-size: 1.8rem; font-weight: 600; margin: 16px 0;">Forex Bot — Fully Automated</h2>
+    <p style="max-width: 500px; margin: 0 auto; color: #cbd5e1; font-size: 0.9rem;">MT4/MT5 compatible. Risk management, live monitoring, lifetime updates.</p>
+    <div class="price-tag">$130 USD</div>
+    <a href="https://wa.me/254799045699?text=Hello%20Calekyz%2C%20I%20want%20to%20buy%20the%20Forex%20Bot" target="_blank" class="btn btn-whatsapp">📲 CONTACT ON WHATSAPP</a>
+    
+    <div class="payment-details-area">
+      <h4><i class="fas fa-credit-card"></i> PAYMENT DETAILS</h4>
+      <div class="payment-icons">
+        <span><i class="fas fa-mobile-alt"></i> M-Pesa: +254 799 045 699</span>
+        <span><i class="fab fa-bitcoin"></i> USDT (TRC20): TXm8x...9GkL</span>
+        <span><i class="fas fa-university"></i> Bank: Equity (upon request)</span>
+      </div>
+      <p style="font-size: 0.65rem; color:#5a6a82; margin-top: 16px;">*Payment confirmation via WhatsApp after transfer*</p>
+    </div>
+
+    <!-- NEW: FREE BOT APPLICATION SECTION -->
+    <div style="margin-top: 40px; padding: 32px; background: linear-gradient(135deg, rgba(0,100,255,0.1), rgba(255,215,0,0.05)); border-radius: 28px; border: 2px solid rgba(255,215,0,0.4);">
+      
+      <!-- Step 1: Affiliate Link -->
+      <div style="text-align: center; margin-bottom: 28px;">
+        <div style="font-size: 0.8rem; color: #ffd700; letter-spacing: 2px; margin-bottom: 8px;">⭐ STEP 1 ⭐</div>
+        <h3 style="font-size: 1.3rem; margin-bottom: 12px;">GET THE FOREX EA FOR FREE</h3>
+        <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 16px;">Click below to register (it's free). You must complete this step before applying for the bot.</p>
+        <a href="https://www.puprime.partners/forex-trading-account/?affid=7389780" target="_blank" id="affiliateLinkBtn" class="btn btn-gold" style="background: linear-gradient(135deg, #ffd700, #ffaa00); font-size: 1rem; padding: 14px 32px;">
+          🌐 CREATE FOREX ACCOUNT NOW → FREE
+        </a>
+        <p style="font-size: 0.7rem; color: #5a6a82; margin-top: 10px;">Opens in new tab • Takes 2-3 minutes</p>
+      </div>
+
+      <!-- Divider -->
+      <div style="text-align: center; margin: 20px 0; position: relative;">
+        <span style="background: rgba(0,100,255,0.3); padding: 6px 16px; border-radius: 40px; font-size: 0.7rem;">⬇ THEN STEP 2 ⬇</span>
+      </div>
+
+      <!-- Step 2: Application Form -->
+      <div>
+        <div style="text-align: center; margin-bottom: 20px;">
+          <div style="font-size: 0.8rem; color: #60a5fa; letter-spacing: 2px;">🎯 STEP 2</div>
+          <h3 style="font-size: 1.3rem;">Apply for Your Free Bot</h3>
+          <p style="color: #cbd5e1; font-size: 0.8rem;">After creating your account, fill out the form below</p>
+        </div>
+
+        <form id="freeBotApplicationForm">
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div>
+              <label style="font-size: 0.8rem; color: #a5b4fc; display: block; margin-bottom: 6px;">Full Name *</label>
+              <input type="text" id="freeBotName" required placeholder="John Doe" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.4); border: 1px solid rgba(0,100,255,0.3); border-radius: 12px; color: white; font-family: inherit;">
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; color: #a5b4fc; display: block; margin-bottom: 6px;">Email Address *</label>
+              <input type="email" id="freeBotEmail" required placeholder="you@example.com" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.4); border: 1px solid rgba(0,100,255,0.3); border-radius: 12px; color: white; font-family: inherit;">
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; color: #a5b4fc; display: block; margin-bottom: 6px;">MT5 Login ID (ONLY - No Password) *</label>
+              <input type="text" id="freeBotMt5Id" required placeholder="e.g., 12345678" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.4); border: 1px solid rgba(0,100,255,0.3); border-radius: 12px; color: white; font-family: inherit;">
+              <p style="font-size: 0.6rem; color: #ffaa00; margin-top: 4px;">⚠️ Only provide your login ID. NEVER share your password.</p>
+            </div>
+            <div>
+              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                <input type="checkbox" id="freeBotConfirm" required style="width: 18px; height: 18px;">
+                <span style="font-size: 0.8rem; color: #cbd5e1;">✅ I have created my forex account using the affiliate link above</span>
+              </label>
+            </div>
+          </div>
+          
+          <button type="submit" id="sendWhatsAppApplicationBtn" class="btn btn-whatsapp" style="width: 100%; margin-top: 24px; justify-content: center; padding: 14px; font-size: 1rem;">
+            📤 SEND APPLICATION TO WHATSAPP
+          </button>
+        </form>
+
+        <p style="text-align: center; font-size: 0.7rem; color: #5a6a82; margin-top: 16px;">
+          ⏱️ After sending, I will integrate the bot to your MT5 account within 2 hours.<br>
+          I will contact you via WhatsApp/Email once completed.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLASSES SECTION -->
+  <div class="classes-section" id="live-classes">
+    <div class="section-badge">🎓 LIVE TRADING EDUCATION</div>
+    <h2 style="font-size: 1.9rem; font-weight: 700; margin-bottom: 16px;">Learn from <span style="background: linear-gradient(135deg, #0064ff, #ffd700); -webkit-background-clip: text; background-clip: text; color: transparent;">Caleb Orenge</span></h2>
+    <p style="color: #cbd5e1; max-width: 600px; margin: 0 auto;">Daily live classes • Real market analysis • Q&A included</p>
+
+    <div class="class-card">
+      <div class="class-icon">📊🎓</div>
+      <div class="class-title">Forex & Deriv Live Classes</div>
+      <div class="class-schedule"><i class="far fa-clock"></i> 9:00 PM – 11:00 PM (Daily)</div>
+      <div class="class-teacher">👨‍🏫 Teacher: Caleb Orenge (Calekyztrading)</div>
+      
+      <div class="prices-container">
+        <div class="price-item">
+          <div class="price-label">🔥 BUNDLE (Both)</div>
+          <div class="price-amount">$60 <span style="font-size: 1rem;">USD</span></div>
+          <div class="price-kenya">🇰🇪 8,000 KSH</div>
+          <div style="font-size: 0.7rem; color: #60a5fa; margin-top: 6px;">Forex + Deriv Full Access</div>
+        </div>
+        <div class="price-item">
+          <div class="price-label">📈 DERIV Only</div>
+          <div class="price-amount">$30 <span style="font-size: 1rem;">USD</span></div>
+          <div class="price-kenya">🇰🇪 4,000 KSH</div>
+          <div style="font-size: 0.7rem; color: #60a5fa; margin-top: 6px;">Binary & Price Action Focus</div>
+        </div>
+      </div>
+      
+      <div class="payment-methods">
+        <span><i class="fas fa-mobile-alt"></i> M-Pesa</span>
+        <span><i class="fab fa-bitcoin"></i> Crypto (BTC/USDT)</span>
+      </div>
+      
+      <button class="btn btn-gold btn-class" id="openClassModalBtn">
+        📚 Enroll Now — Choose Package
+      </button>
+      <p style="font-size: 0.65rem; color: #5a6a82; margin-top: 16px;">
+        *Classes run daily • Recordings available • WhatsApp support included
+      </p>
+    </div>
+  </div>
+
+  <!-- TRUST BADGES -->
+  <div class="trust-badge">
+    <div class="trust-item"><div class="trust-icon">🔒</div><h3>Transparent Execution</h3><p>Real quotes, no hidden spreads</p></div>
+    <div class="trust-item"><div class="trust-icon">⚡</div><h3>24/7 Automation</h3><p>Dedicated infrastructure</p></div>
+    <div class="trust-item"><div class="trust-icon">📊</div><h3>Proven Track Record</h3><p>1000+ active traders</p></div>
+    <div class="trust-item"><div class="trust-icon">🛡️</div><h3>Tier-1 Brokers</h3><p>Deriv • PU Prime</p></div>
+  </div>
+
+  <!-- BOTTOM CTA -->
+  <div style="text-align: center; margin: 40px 0 20px;">
+    <p style="margin-bottom: 24px; font-size: 1rem; font-weight: 500;">Ready to scale your trading?</p>
+    <div class="button-group" style="justify-content: center;">
+      <a href="https://deriv.partners/rx?sidc=B7409B98-DAA5-4D02-9341-8A0621A99C68&utm_campaign=dynamicworks&utm_medium=affiliate&utm_source=CU67920" target="_blank" class="btn btn-primary">DERIV ACCOUNT</a>
+      <a href="https://www.puprime.partners/forex-trading-account/?affid=7389780" target="_blank" class="btn btn-secondary">FOREX ACCOUNT</a>
+      <a href="https://wa.me/254799045699?text=Hello%20Calekyz%2C%20I%20have%20a%20question%20about%20your%20services" target="_blank" class="btn btn-whatsapp">WHATSAPP SUPPORT</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Calekyz FX — Institutional Trading Infrastructure.<br>
+    <strong>Risk warning:</strong> Trading forex, CFDs, and binary options involves substantial risk of loss. Past performance does not guarantee future results. Account management services do not eliminate market risk. Only trade with money you can afford to lose.<br>
+    📞 WhatsApp Support: <a href="https://wa.me/254799045699" style="color:#25D366; text-decoration:none;">+254 799 045 699</a></p>
+  </footer>
+</div>
+</div>
+
+<!-- AFFILIATE POPUP -->
+<div id="affiliatePopup" class="affiliate-popup-overlay">
+  <div class="affiliate-popup">
+    <h3>🔥 Featured Affiliate Offers</h3>
+    <div class="popup-sub">Create an account & start trading with top brokers</div>
+    <div class="affiliate-links">
+      <a href="https://deriv.partners/rx?sidc=B7409B98-DAA5-4D02-9341-8A0621A99C68&utm_campaign=dynamicworks&utm_medium=affiliate&utm_source=CU67920" target="_blank" class="affiliate-card">
+        <div class="affiliate-icon"><i class="fas fa-chart-simple"></i></div>
+        <div class="affiliate-info"><strong>Deriv</strong><small>Binary & CFDs • Award-winning platform</small></div>
+        <i class="fas fa-arrow-right"></i>
+      </a>
+      <a href="https://www.puprime.partners/forex-trading-account/?affid=7389780" target="_blank" class="affiliate-card">
+        <div class="affiliate-icon"><i class="fas fa-building-columns"></i></div>
+        <div class="affiliate-info"><strong>PU Prime</strong><small>Create Forex Account • Low spreads • Fast execution</small></div>
+        <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+    <button class="close-popup-btn" id="closePopupBtn">CLOSE</button>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div id="copyTradingModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeCopyModal()">&times;</span><h3>📋 Request Account Management</h3><p style="font-size: 0.8rem; margin-bottom: 16px;">Fill in your details and I'll respond on WhatsApp within 12 hours.</p><form id="copyTradingForm"><label>Full Name *</label><input type="text" id="copyName" required><label>Phone Number (WhatsApp) *</label><input type="tel" id="copyPhone" required><label>Trading Platform</label><select id="copyPlatform"><option>MT4</option><option>MT5</option><option>Deriv</option><option>cTrader</option><option>Other</option></select><label>Initial Deposit Amount (USD)</label><input type="number" id="copyDeposit" placeholder="e.g., 500"><label>Additional Message (Optional)</label><textarea id="copyMessage" rows="3"></textarea><button type="submit" class="btn btn-gold" style="width:100%; margin-top:12px;">SEND TO WHATSAPP →</button></form><p class="risk-warning" style="margin-top: 16px;">⚠️ By submitting, you confirm you understand the risks of forex trading.</p></div></div>
+<div id="customBotModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeBotModal()">&times;</span><h3>🤖 Request Custom Trading Bot</h3><p style="font-size: 0.8rem; margin-bottom: 16px;">Describe your bot idea.</p><form id="customBotForm"><label>Your Name *</label><input type="text" id="botName" required><label>Your Email *</label><input type="email" id="botEmail" required><label>Bot Description *</label><textarea id="botDescription" rows="4" required></textarea><label>Budget (Optional)</label><input type="text" id="botBudget"><button type="submit" class="btn btn-primary" style="width:100%; margin-top:12px;">SUBMIT IDEA → EMAIL</button></form></div></div>
+<div id="classModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeClassModal()">&times;</span><h3>📚 Enroll in Live Classes</h3><form id="classEnrollmentForm"><label>Select Package *</label><select id="classPackage" required><option value="Forex + Deriv Bundle - $60 USD (8,000 KSH)">🔥 BUNDLE: Forex + Deriv — $60 (8,000 KSH)</option><option value="Deriv Only - $30 USD (4,000 KSH)">📈 DERIV Only — $30 (4,000 KSH)</option></select><label>Full Name *</label><input type="text" id="className" required><label>Phone Number (WhatsApp) *</label><input type="tel" id="classPhone" required><label>Payment Method</label><select id="classPaymentMethod"><option value="M-Pesa">🇰🇪 M-Pesa</option><option value="Crypto">₿ Crypto (BTC / USDT)</option></select><label>Transaction Reference (Optional)</label><input type="text" id="classTxRef"><button type="submit" class="btn btn-gold" style="width:100%;">✅ SEND ENROLLMENT REQUEST</button></form></div></div>
+
+<!-- FLOATING SOCIAL BUTTON -->
+<div id="floatingSocial" class="floating-social-container">
+  <div class="social-float-btn" id="socialFloatBtn"><i class="fas fa-share-alt"></i></div>
+  <div class="social-float-menu" id="socialFloatMenu">
+    <a href="https://t.me/calekyz254" target="_blank" class="social-float-item"><i class="fab fa-telegram-plane"></i> Telegram</a>
+    <a href="https://tiktok.com/@calekyz.com" target="_blank" class="social-float-item"><i class="fab fa-tiktok"></i> TikTok</a>
+    <a href="https://youtube.com/@calekyztradingsite" target="_blank" class="social-float-item"><i class="fab fa-youtube"></i> YouTube</a>
+    <a href="https://whatsapp.com/channel/0029Vb6NOev89inkCXWzsp3D" target="_blank" class="social-float-item"><i class="fab fa-whatsapp"></i> WhatsApp Channel</a>
+    <a href="https://chat.whatsapp.com/DNyAahz0r2UCkEBm6Otsm2" target="_blank" class="social-float-item"><i class="fab fa-whatsapp"></i> WhatsApp Group</a>
+    <a href="https://wa.me/254799045699" target="_blank" class="social-float-item"><i class="fab fa-whatsapp"></i> WhatsApp Support</a>
+  </div>
+</div>
+
+<!-- SMART CHAT BUTTON -->
+<div class="smart-chat-container"><div class="smart-chat-btn" id="smartChatBtn"><i class="fas fa-comment-dots"></i></div><div class="chat-menu" id="chatMenu"><div class="chat-option ai-option" id="aiChatOption"><i class="fas fa-robot"></i><span>🤖 AI Assistant</span></div><a href="https://wa.me/254799045699?text=Hello%20Calekyz%2C%20I%20need%20help" target="_blank" class="chat-option whatsapp-option"><i class="fab fa-whatsapp"></i><span>📱 WhatsApp Support</span></a></div></div>
+
+<button class="scroll-top" id="scrollTopBtn" onclick="scrollToTop()">↑</button>
+
+<script>
+  // DARK/LIGHT MODE TOGGLE
+  const themeToggle = document.getElementById('themeToggleBtn');
+  function setTheme(isDark) {
+    if (isDark) {
+      document.body.classList.remove('light-mode');
+      if (document.getElementById('themeText')) document.getElementById('themeText').innerHTML = 'Light';
+      if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i> <span id="themeText">Light</span>';
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.add('light-mode');
+      if (document.getElementById('themeText')) document.getElementById('themeText').innerHTML = 'Dark';
+      if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i> <span id="themeText">Dark</span>';
+      localStorage.setItem('theme', 'light');
+    }
+    const newSpan = document.getElementById('themeText');
+    if (newSpan) newSpan.innerText = document.body.classList.contains('light-mode') ? 'Dark' : 'Light';
+  }
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') setTheme(false);
+  else setTheme(true);
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => setTheme(document.body.classList.contains('light-mode')));
+  }
+
+  // Affiliate popup
+  const forexPortalBtn = document.getElementById('forexPortalBtnHeader');
+  const affiliatePopup = document.getElementById('affiliatePopup');
+  const closePopup = document.getElementById('closePopupBtn');
+  if (forexPortalBtn) forexPortalBtn.addEventListener('click', () => affiliatePopup.classList.add('show'));
+  if (closePopup) closePopup.addEventListener('click', () => affiliatePopup.classList.remove('show'));
+  if (affiliatePopup) affiliatePopup.addEventListener('click', (e) => { if (e.target === affiliatePopup) affiliatePopup.classList.remove('show'); });
+
+  // Modal functions
+  function closeCopyModal() { document.getElementById('copyTradingModal')?.classList.remove('show'); }
+  function closeBotModal() { document.getElementById('customBotModal')?.classList.remove('show'); }
+  function closeClassModal() { document.getElementById('classModal')?.classList.remove('show'); }
+  
+  document.getElementById('copyTradingBtn')?.addEventListener('click', () => document.getElementById('copyTradingModal')?.classList.add('show'));
+  document.getElementById('customBotBtn')?.addEventListener('click', () => document.getElementById('customBotModal')?.classList.add('show'));
+  document.getElementById('openClassModalBtn')?.addEventListener('click', () => document.getElementById('classModal')?.classList.add('show'));
+  
+  document.getElementById('copyTradingForm')?.addEventListener('submit', (e) => { e.preventDefault(); window.open(`https://wa.me/254799045699?text=Copy Trading Request from ${document.getElementById('copyName')?.value}`, '_blank'); closeCopyModal(); });
+  document.getElementById('customBotForm')?.addEventListener('submit', (e) => { e.preventDefault(); window.location.href = `mailto:caleborenge07@gmail.com?subject=Bot Request&body=${encodeURIComponent(document.getElementById('botDescription')?.value || '')}`; closeBotModal(); });
+  document.getElementById('classEnrollmentForm')?.addEventListener('submit', (e) => { e.preventDefault(); window.open(`https://wa.me/254799045699?text=Class Enrollment: ${document.getElementById('classPackage')?.value} from ${document.getElementById('className')?.value}`, '_blank'); closeClassModal(); });
+
+  // Chat button
+  const chatBtn = document.getElementById('smartChatBtn');
+  const chatMenu = document.getElementById('chatMenu');
+  if (chatBtn && chatMenu) {
+    chatBtn.addEventListener('click', (e) => { e.stopPropagation(); chatMenu.classList.toggle('show'); });
+    document.addEventListener('click', (e) => { if (!chatBtn.contains(e.target) && !chatMenu.contains(e.target)) chatMenu.classList.remove('show'); });
+  }
+  
+  // AI Chat option with Chatbase
+  const aiOption = document.getElementById('aiChatOption');
+  if (aiOption) {
+    aiOption.addEventListener('click', () => {
+      if (window.chatbase) {
+        window.chatbase("open");
+      } else {
+        alert("🤖 AI Assistant is loading. Please wait a moment or use WhatsApp support.");
+      }
+    });
+  }
+
+  // FREE BOT APPLICATION - SEND TO WHATSAPP
+  const freeBotForm = document.getElementById('freeBotApplicationForm');
+  if (freeBotForm) {
+    freeBotForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Get values
+      const name = document.getElementById('freeBotName').value;
+      const email = document.getElementById('freeBotEmail').value;
+      const mt5Id = document.getElementById('freeBotMt5Id').value;
+      const confirmed = document.getElementById('freeBotConfirm').checked;
+      
+      // Validation
+      if (!name || !email || !mt5Id) {
+        alert('❌ Please fill in all fields.');
+        return;
+      }
+      if (!confirmed) {
+        alert('❌ Please confirm that you have created your forex account using the affiliate link above.');
+        return;
+      }
+      
+      // Create WhatsApp message
+      const message = `*NEW FREE BOT APPLICATION*%0A%0A*Name:* ${name}%0A*Email:* ${email}%0A*MT5 Login ID:* ${mt5Id}%0A*Confirmed account created via affiliate link:* Yes%0A%0A⏱️ Please integrate bot within 2 hours.`;
+      
+      // Open WhatsApp
+      window.open(`https://wa.me/254799045699?text=${message}`, '_blank');
+      
+      // Optional: Show success message and clear form
+      alert('✅ Application sent! I will contact you on WhatsApp within 2 hours to confirm the bot integration.');
+      freeBotForm.reset();
+    });
+  }
+
+  // Canvas animation
+  const canvas = document.getElementById('candleCanvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+    let candles = [];
+    for (let i = 0; i < 30; i++) candles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, bodyHeight: 25 + Math.random() * 60, width: 6 + Math.random() * 10, isGreen: Math.random() > 0.5, speed: 0.3 + Math.random() * 1 });
+    function drawCandles() { if (!ctx) return; ctx.clearRect(0, 0, canvas.width, canvas.height); for (let c of candles) { c.y -= c.speed; if (c.y + c.bodyHeight < 0) { c.y = canvas.height + c.bodyHeight; c.x = Math.random() * canvas.width; c.isGreen = Math.random() > 0.5; c.bodyHeight = 25 + Math.random() * 60; } const halfWidth = c.width / 2; ctx.fillStyle = c.isGreen ? 'rgba(0, 200, 100, 0.3)' : 'rgba(255, 80, 100, 0.25)'; ctx.fillRect(c.x - halfWidth, c.y - c.bodyHeight, c.width, c.bodyHeight); ctx.strokeStyle = c.isGreen ? '#00ff88' : '#ff4466'; ctx.strokeRect(c.x - halfWidth, c.y - c.bodyHeight, c.width, c.bodyHeight); } requestAnimationFrame(drawCandles); }
+    drawCandles();
+  }
+  
+  // Loader counter
+  let percent = 0, activeCount = 0, targetActive = 809;
+  const percentInterval = setInterval(() => { if (percent < 100) { percent += 2; const pEl = document.getElementById('loadingPercent'); if (pEl) pEl.innerText = `INITIALIZING ${percent}%`; } }, 100);
+  const activeInterval = setInterval(() => { if (activeCount < targetActive) { activeCount += Math.ceil(targetActive / 50); if (activeCount > targetActive) activeCount = targetActive; const aEl = document.getElementById('activeUserCount'); if (aEl) aEl.innerText = activeCount.toLocaleString(); } else clearInterval(activeInterval); }, 100);
+  setTimeout(() => { const loader = document.getElementById('pageLoader'); const mainContent = document.getElementById('mainContent'); if (loader) loader.classList.add('hide'); if (mainContent) mainContent.classList.add('visible'); setTimeout(() => { if (loader) loader.style.display = 'none'; clearInterval(percentInterval); }, 600); }, 5000);
+  
+  // Scroll to top
+  window.addEventListener('scroll', () => { const btn = document.getElementById('scrollTopBtn'); if (btn) btn.classList.toggle('visible', window.scrollY > 300); });
+  window.scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.onclick = (event) => { if (event.target.classList && event.target.classList.contains('modal')) event.target.classList.remove('show'); };
+
+  // FLOATING SOCIAL BUTTON - DRAGGABLE
+  const socialContainer = document.getElementById('floatingSocial');
+  const socialFloatBtn = document.getElementById('socialFloatBtn');
+  const socialFloatMenu = document.getElementById('socialFloatMenu');
+  let isDraggingSocial = false, dragStartX, dragStartY, startLeft, startTop;
+  
+  function getSocialCoord(e) { return { x: e.clientX ?? (e.touches?.[0]?.clientX || 0), y: e.clientY ?? (e.touches?.[0]?.clientY || 0) }; }
+  function onSocialDragStart(e) { e.preventDefault(); isDraggingSocial = true; const rect = socialContainer.getBoundingClientRect(); startLeft = rect.left; startTop = rect.top; const { x, y } = getSocialCoord(e); dragStartX = x - startLeft; dragStartY = y - startTop; socialContainer.style.transition = 'none'; }
+  function onSocialDragMove(e) { if (!isDraggingSocial) return; e.preventDefault(); const { x, y } = getSocialCoord(e); let newLeft = x - dragStartX; let newTop = y - dragStartY; newLeft = Math.min(Math.max(0, newLeft), window.innerWidth - socialContainer.offsetWidth); newTop = Math.min(Math.max(0, newTop), window.innerHeight - socialContainer.offsetHeight); socialContainer.style.left = newLeft + 'px'; socialContainer.style.top = newTop + 'px'; socialContainer.style.transform = 'none'; }
+  function onSocialDragEnd() { if (!isDraggingSocial) return; isDraggingSocial = false; socialContainer.style.transition = ''; const rect = socialContainer.getBoundingClientRect(); localStorage.setItem('socialFloatLeft', rect.left); localStorage.setItem('socialFloatTop', rect.top); }
+  socialFloatBtn.addEventListener('mousedown', onSocialDragStart); window.addEventListener('mousemove', onSocialDragMove); window.addEventListener('mouseup', onSocialDragEnd);
+  socialFloatBtn.addEventListener('touchstart', onSocialDragStart, { passive: false }); window.addEventListener('touchmove', onSocialDragMove, { passive: false }); window.addEventListener('touchend', onSocialDragEnd);
+  socialFloatBtn.addEventListener('click', (e) => { if (isDraggingSocial) return; e.stopPropagation(); socialFloatMenu.classList.toggle('show'); });
+  document.addEventListener('click', (e) => { if (!socialContainer.contains(e.target)) socialFloatMenu.classList.remove('show'); });
+  const savedLeftPos = localStorage.getItem('socialFloatLeft'), savedTopPos = localStorage.getItem('socialFloatTop');
+  if (savedLeftPos && savedTopPos) { socialContainer.style.left = savedLeftPos + 'px'; socialContainer.style.top = savedTopPos + 'px'; socialContainer.style.transform = 'none'; }
+</script>
+
+<!-- CHATBASE EMBED CODE - YOUR EXACT PROVIDED CODE -->
+<script>
+(function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="yvOGp-C94Skb34vFutYzd";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+</script>
+</body>
+</html>
